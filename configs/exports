@@ -1,0 +1,12 @@
+# Environment variables
+export EDITOR='nvim'
+export VISUAL='nvim'
+export PAGER='less'
+export LESS='-R --use-color -Dd+r$Du+b'
+
+# Development
+export PYTHONUNBUFFERED=1
+export PIPENV_VENV_IN_PROJECT=1
+
+# Path additions
+export PATH="$HOME/.local/bin:$PATH"

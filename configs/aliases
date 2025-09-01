@@ -1,0 +1,76 @@
+# Custom aliases
+alias editaliases='vim ~/aliases; source ~/aliases' # edit aliases file
+alias editexports='vim ~/exports; source ~/exports' # edit exports file
+
+# Quick add aliases and exports
+addalias() {
+    if [ $# -ne 2 ]; then
+        echo "Usage: addalias <alias_name> <command>"
+        echo "Example: addalias ll 'ls -la'"
+        return 1
+    fi
+    echo "" >> ~/aliases
+    echo "alias $1=\"$2\"" >> ~/aliases
+    source ~/aliases
+    echo "Added alias: $1=\"$2\""
+}
+
+addexport() {
+    if [ $# -ne 2 ]; then
+        echo "Usage: addexport <variable_name> <value>"
+        echo "Example: addexport JAVA_HOME /usr/lib/jvm/java-11"
+        return 1
+    fi
+    echo "" >> ~/exports
+    echo "export $1=\"$2\"" >> ~/exports
+    source ~/exports
+    echo "Added export: $1=\"$2\""
+}
+
+# dotfiles
+alias dot='cd ~/dotfiles'
+alias editexports='vim ~/.configs/exports; source ~/.configs/exports' # edit export file
+alias zshconfig='vim ~/.zshrc; source ~/.zshrc'
+alias ohmyzsh='vim ~/.oh-my-zsh'
+alias editzshenv='vim ~/.zshenv;  source ~/.zshenv'	# edit and source zshenv file
+
+# history
+alias clearhistory='rm ~/.zsh_history' # remove history file
+
+# command aliases
+alias rm='rm -iv'                           # Preferred safe 'rm' implementation
+alias cp='cp -iv'                           # Preferred 'cp' implementation
+alias mv='mv -iv'                           # Preferred 'mv' implementation
+alias mkdir='mkdir -pv'                     # Preferred 'mkdir' implementation
+# Note: ll, la, l aliases are set in ~/.zshrc with modern tools (eza)
+alias cd..='cd ../'                         # Go back 1 directory level (for fast typers)
+alias ..='cd ../'                           # Go back 1 directory level
+alias ...='cd ../../'                       # Go back 2 directory levels
+alias .1='cd ../'                           # Go back 1 directory level
+alias .2='cd ../../'                        # Go back 2 directory levels
+alias .3='cd ../../../'                     # Go back 3 directory levels
+alias .4='cd ../../../../'                  # Go back 4 directory levels
+alias .5='cd ../../../../../'               # Go back 5 directory levels
+alias .6='cd ../../../../../../'            # Go back 6 directory levels
+alias c='clear'                             # c: Clear terminal display
+alias path='echo -e ${PATH//:/\\n}'         # path: Echo all executable Paths
+alias f='open -a Finder ./'                 # f: Opens current directory in MacOS Finder
+alias numFiles='echo $(ls -1 | wc -l)'      # number of files
+alias ssh-tun='ssh -D 2345 '		    # ssh tunnel
+alias add-keys='ssh-add ~/.ssh/*id_rsa && ssh-add ~/.ssh/*.cer && ssh-add ~/.ssh/*.pem' # ssh keys
+alias notes='cd /Users/ebrown/Library/Mobile\ Documents/iCloud~md~obsidian/Documents' # cd to notes dir
+
+# git commands aliases
+alias gs='git status'
+alias gp='git push'
+alias gpl='git pull'
+
+# mise aliases (replaces pyenv)
+alias pyv='mise list python'
+alias pyg='mise use python'
+alias pyglatest='mise use python@latest'    # latest python version
+
+# home
+alias homepi='ssh pi@192.168.1.31' # ssh into home raspberry pi locallyalias testalias="echo "Hello from test alias!""
+
+alias testalias2="echo "Test alias 2 works!""
