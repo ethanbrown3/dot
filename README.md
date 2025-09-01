@@ -13,7 +13,7 @@ A comprehensive dotfiles repository that automates setting up a modern developme
 
 ### After Cloning
 ```bash
-git clone https://github.com/ethanbrown3/dotfiles.git
+git clone https://github.com/ethanbrown3/dotfiles.git ~/dotfiles
 cd dotfiles
 ./scripts/setup.sh
 ```
