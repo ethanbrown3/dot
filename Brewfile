@@ -28,3 +28,4 @@ cask "docker"                 # Container platform - https://www.docker.com/prod
 cask "font-jetbrains-mono-nerd-font"  # Developer font - https://www.nerdfonts.com/
 cask "google-chrome"          # Web browser - https://www.google.com/chrome/
 cask "1password"              # Password manager - https://1password.com/
+cask "chatgpt"                # ChatGPT Desktop App
