@@ -10,3 +10,5 @@ export PIPENV_VENV_IN_PROJECT=1
 
 # Path additions
 export PATH="$HOME/.local/bin:$PATH"
+
+export TEST_VAR="test_value"

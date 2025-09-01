@@ -29,7 +29,7 @@ addexport() {
 
 # dotfiles
 alias dot='cd ~/dotfiles'
-alias editexports='vim ~/.configs/exports; source ~/.configs/exports' # edit export file
+alias editexports='vim ~/exports; source ~/exports' # edit export file
 alias zshconfig='vim ~/.zshrc; source ~/.zshrc'
 alias ohmyzsh='vim ~/.oh-my-zsh'
 alias editzshenv='vim ~/.zshenv;  source ~/.zshenv'	# edit and source zshenv file
@@ -71,6 +71,4 @@ alias pyg='mise use python'
 alias pyglatest='mise use python@latest'    # latest python version
 
 # home
-alias homepi='ssh pi@192.168.1.31' # ssh into home raspberry pi locallyalias testalias="echo "Hello from test alias!""
-
-alias testalias2="echo "Test alias 2 works!""
+alias homepi='ssh pi@192.168.1.31' # ssh into home raspberry pi locally
