@@ -10,5 +10,3 @@
 	lg = !"git lg1"
 	gcg = config --edit --global
 	gcl = config --edit --local
-[pull]
-	rebase = true

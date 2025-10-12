@@ -12,3 +12,10 @@ export PIPENV_VENV_IN_PROJECT=1
 export PATH="$HOME/.local/bin:$PATH"
 
 export TEST_VAR="test_value"
+
+# AWS
+export AWS_DEFAULT_REGION=us-east-1
+
+# Granted
+export GRANTED_ALIAS_CONFIGURED="true"
+

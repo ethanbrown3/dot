@@ -1,6 +1,7 @@
 # Brewfile
 tap "homebrew/bundle"
 tap "homebrew/cask"
+tap "common-fate/granted"
 
 # Brews
 brew "git"                    # Version control - https://git-scm.com/
@@ -19,6 +20,7 @@ brew "neovim"                 # Modern Vim - https://neovim.io/
 brew "uv"                     # Fast Python package manager - https://github.com/astral-sh/uv
 brew "poetry"                 # Python dependency management - https://python-poetry.org/
 brew "awscli"                 # AWS command line interface - https://docs.aws.amazon.com/cli/
+brew "granted"                # Granted aws profile switcher - https://docs.commonfate.io/granted/introduction
 
 # Casks
 cask "cursor"                 # AI-first code editor - https://cursor.sh/
