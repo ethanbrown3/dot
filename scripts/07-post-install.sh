@@ -16,31 +16,40 @@ log "Running post-install tasks..."
 
 # fzf bindings
 if command -v fzf >/dev/null 2>&1; then
-    /opt/homebrew/opt/fzf/install --key-bindings --completion --no-update-rc --no-bash --no-fish --no-zsh >/dev/null 2>&1 || true
-    log "fzf keybindings installed"
+    if [ ! -f "$HOME/.fzf.zsh" ]; then
+        /opt/homebrew/opt/fzf/install --key-bindings --completion --no-update-rc --no-bash --no-fish >/dev/null 2>&1 || true
+        log "fzf keybindings installed"
+    else
+        log "fzf keybindings already installed"
+    fi
 fi
 
 # VS Code extensions
 if command -v code >/dev/null 2>&1; then
     log "Installing VS Code extensions..."
+    INSTALLED_EXTENSIONS=$(code --list-extensions 2>/dev/null || echo "")
     while read -r ext; do
-        code --install-extension "$ext" || true
+        if ! echo "$INSTALLED_EXTENSIONS" | grep -qi "^${ext}$"; then
+            code --install-extension "$ext" || true
+            log "Installed $ext"
+        fi
     done <<'EOF'
 esbenp.prettier-vscode
 ms-python.python
 ms-python.vscode-pylance
-ms-toolsai.jupyter
 dbaeumer.vscode-eslint
 ms-vscode.vscode-typescript-next
-GitHub.copilot
 ms-azuretools.vscode-docker
-HashiCorp.terraform
 EOF
-    log "VS Code extensions installed"
+    log "VS Code extensions check complete"
 fi
 
-# Start Docker
-open -ga "Docker" || true
-log "Docker started"
+# Start Docker if not running
+if ! pgrep -x "Docker" >/dev/null 2>&1; then
+    open -ga "Docker" || true
+    log "Docker started"
+else
+    log "Docker already running"
+fi
 
 log "Post-install tasks complete!"
