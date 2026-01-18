@@ -18,26 +18,29 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 log "🚀 Starting development environment setup..."
 
 # Run all setup scripts in order
-log "Step 1/7: Installing prerequisites..."
+log "Step 1/8: Installing prerequisites..."
 "$SCRIPT_DIR/01-prerequisites.sh"
 
-log "Step 2/7: Installing packages..."
+log "Step 2/8: Installing packages..."
 "$SCRIPT_DIR/02-packages.sh"
 
-log "Step 3/7: Setting up shell environment..."
+log "Step 3/8: Setting up shell environment..."
 "$SCRIPT_DIR/03-shell.sh"
 
-log "Step 4/7: Setting up runtime environments..."
+log "Step 4/8: Setting up runtime environments..."
 "$SCRIPT_DIR/04-runtimes.sh"
 
-log "Step 5/7: Setting up dotfiles..."
+log "Step 5/8: Setting up dotfiles..."
 "$SCRIPT_DIR/05-dotfiles.sh"
 
-log "Step 6/7: Applying macOS defaults..."
+log "Step 6/8: Applying macOS defaults..."
 "$SCRIPT_DIR/06-macos-defaults.sh"
 
-log "Step 7/7: Running post-install tasks..."
+log "Step 7/8: Running post-install tasks..."
 "$SCRIPT_DIR/07-post-install.sh"
+
+log "Step 8/8: Setting up AI coding tools..."
+"$SCRIPT_DIR/08-ai-tools.sh"
 
 log "🎉 Setup complete! 🚀"
 log "Please restart your terminal or run 'source ~/.zshrc' to apply changes."
