@@ -12,6 +12,9 @@ These standards apply across all projects unless overridden by project-specific 
 - Write meaningful commit messages (imperative mood)
 - Reference ticket IDs in commits when applicable
 - Keep PRs focused on a single change
+- **Phantom org repos require GPG-signed commits** - never commit unsigned to `phantom/*` repos (user will need to touch YubiKey)
+  - Check with: `gh repo view --json owner -q '.owner.login'`
+  - If owner is `phantom`, ensure commits are signed (git config commit.gpgsign should be true for these repos)
 
 ## Security
 - Never commit secrets, API keys, or credentials
