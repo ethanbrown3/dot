@@ -1,5 +1,15 @@
 .zsh_history
 .vscode
-.claude
 .zcompdump*
 .zsh_sessions
+
+# AI tool local/sensitive files (machine-specific)
+claude/.claude/settings.local.json
+claude/.claude/*.local.*
+*.local.json
+*.local.md
+
+# Claude Code session data (if any gets created)
+claude/.claude/statsig/
+claude/.claude/projects/
+claude/.claude/todos/
