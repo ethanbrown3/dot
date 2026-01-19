@@ -15,6 +15,7 @@ These standards apply across all projects unless overridden by project-specific 
 - **Phantom org repos require GPG-signed commits** - never commit unsigned to `phantom/*` repos (user will need to touch YubiKey)
   - Check with: `gh repo view --json owner -q '.owner.login'`
   - If owner is `phantom`, ensure commits are signed (git config commit.gpgsign should be true for these repos)
+- **Phantom org repos: always create PRs as drafts** - use `gh pr create --draft` for `phantom/*` repos; other repos can use regular PRs
 
 ## Security
 - Never commit secrets, API keys, or credentials
