@@ -72,3 +72,17 @@ alias pyglatest='mise use python@latest'    # latest python version
 
 # home
 alias homepi='ssh pi@192.168.1.31' # ssh into home raspberry pi locally
+
+# AI coding tools
+alias cc='claude'
+alias ccr='claude --resume'
+
+# AI config management
+alias ai-diff='cd ~/dotfiles && git diff ai-config/ claude/ cursor/ codex/ && cd - > /dev/null'
+alias ai-status='cd ~/dotfiles && git status --short ai-config/ claude/ cursor/ codex/ && cd - > /dev/null'
+alias ai-commit='cd ~/dotfiles && git add ai-config/ claude/ cursor/ codex/ && git commit && cd - > /dev/null'
+alias ai-sync='~/dotfiles/scripts/sync-ai-config.sh'
+
+# PR workflow helpers
+alias fetch-feedback='~/dotfiles/scripts/fetch-pr-feedback.sh'
+alias post-review='~/dotfiles/scripts/post-review.sh'

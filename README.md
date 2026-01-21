@@ -32,7 +32,25 @@ dotfiles/
 │   ├── 04-runtimes.sh                # mise, Python, Node.js, Terraform
 │   ├── 05-dotfiles.sh                # Link dotfiles with stow
 │   ├── 06-macos-defaults.sh          # macOS system preferences
-│   └── 07-post-install.sh            # fzf, VS Code extensions, Docker
+│   ├── 07-post-install.sh            # fzf, VS Code extensions, Docker
+│   ├── 08-ai-tools.sh                # AI coding tools setup
+│   ├── sync-ai-config.sh             # Sync shared AI config to tools
+│   ├── fetch-pr-feedback.sh          # Fetch PR review feedback
+│   └── post-review.sh                # Post review to PR
+├── ai-config/                        # Shared AI tool config
+│   ├── commands/                     # Slash commands (Claude Code)
+│   ├── agents/                       # Agent definitions (all tools)
+│   ├── rules/                        # Coding standards (Cursor, Codex)
+│   └── prompts/                      # Reusable prompt snippets
+├── claude/                           # Claude Code (stowed to ~/.claude)
+│   └── .claude/
+│       ├── settings.json             # Permissions and settings
+│       ├── commands -> ai-config     # Symlink to shared commands
+│       └── agents -> ai-config       # Symlink to shared agents
+├── cursor/                           # Cursor rules
+│   └── .cursorrules                  # Generated from ai-config/rules
+├── codex/                            # OpenAI Codex
+│   └── AGENTS.md                     # Generated from ai-config
 ├── zsh/
 │   └── .zshrc                        # Main shell configuration
 ├── git/
@@ -249,3 +267,105 @@ zshconfig                     # Edit zsh config
 3. Add machine-specific settings to `~/.zshrc.local`
 4. Customize VS Code extensions as needed
 5. Enjoy your new development environment! 🚀
+
+---
+
+## 🤖 AI Coding Tools Configuration
+
+This repo manages configuration for AI coding assistants (Claude Code, Cursor, Codex).
+
+### Architecture
+
+```
+ai-config/           # Shared source of truth
+├── commands/        # Slash commands (Claude Code)
+├── agents/          # Agent definitions (all tools)
+├── rules/           # Coding standards (Cursor, Codex)
+└── prompts/         # Reusable prompt snippets
+
+claude/              # Claude Code specific (stowed to ~/.claude)
+cursor/              # Cursor rules (stowed to ~/.cursorrules)
+codex/               # OpenAI Codex (AGENTS.md)
+```
+
+### Slash Commands (Claude Code)
+
+| Command | Description |
+|---------|-------------|
+| `/impl-summary` | Generate implementation summary for PR description |
+| `/review-pr <number>` | Focused code review with noise filtering |
+| `/address-feedback <number>` | Fetch and address PR review comments |
+| `/log-decision` | Record architectural decision in CLAUDE.md |
+| `/sync-config` | Commit AI config changes to dotfiles |
+
+### Context Detection
+
+Commands auto-detect your project management context:
+
+- **OpenSpec**: Detected if `.openspec/`, `openspec.yaml`, or `openspec.json` exists
+- **Linear**: Detected if branch matches `[A-Z]+-[0-9]+` pattern or `.linear/` exists
+- **Override**: Set `CLAUDE_WORK_CONTEXT=linear` or `=openspec` in `~/.claude/settings.local.json`
+
+### Editing Commands
+
+Commands are symlinked, so edits flow back to dotfiles:
+
+```bash
+# Edit a command (changes go to dotfiles repo)
+vim ~/.claude/commands/impl-summary.md
+
+# Check what changed
+ai-status
+
+# Commit changes
+ai-commit
+
+# Or use Claude Code
+/sync-config
+```
+
+### Adding New Commands
+
+1. Create file in `~/dotfiles/ai-config/commands/your-command.md`
+2. Run `ai-sync` (or restart Claude Code)
+3. Use `/your-command` in Claude Code
+
+### Machine-Specific Config
+
+Add API keys and local overrides to `~/.claude/settings.local.json` (gitignored):
+
+```json
+{
+  "env": {
+    "CLAUDE_WORK_CONTEXT": "linear"
+  },
+  "mcpServers": {
+    "your-mcp-server": { }
+  }
+}
+```
+
+### Shell Aliases
+
+```bash
+cc              # Launch Claude Code
+ccr             # Resume last Claude Code session
+ai-status       # Show changed AI config files
+ai-diff         # Show AI config diffs
+ai-commit       # Commit AI config changes
+ai-sync         # Sync shared config to all tools
+fetch-feedback  # Fetch PR review comments
+post-review     # Post review to PR
+```
+
+### Multi-Tool Sync
+
+Edit shared content in `ai-config/`, then sync to all tools:
+
+```bash
+# Edit shared rules
+vim ~/dotfiles/ai-config/rules/coding-standards.md
+
+# Sync to Cursor and Codex (Claude uses symlinks, no sync needed)
+ai-sync
+```
