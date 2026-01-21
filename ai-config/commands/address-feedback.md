@@ -30,8 +30,46 @@ For each piece of feedback:
 ## Implement Fixes
 
 1. Make the necessary code changes
-2. Run tests: `npm test` or `pytest` or whatever is configured
-3. Run linter if available
+
+2. Detect and run tests:
+   ```bash
+   # Auto-detect test runner
+   if [ -f "package.json" ]; then
+       # Node.js project - check for test script
+       if grep -q '"test"' package.json; then
+           npm test
+       fi
+   elif [ -f "pyproject.toml" ] || [ -f "setup.py" ] || [ -f "pytest.ini" ]; then
+       # Python project
+       if command -v pytest &> /dev/null; then
+           pytest
+       elif command -v python &> /dev/null; then
+           python -m pytest
+       fi
+   elif [ -f "Cargo.toml" ]; then
+       # Rust project
+       cargo test
+   elif [ -f "go.mod" ]; then
+       # Go project
+       go test ./...
+   fi
+   ```
+
+3. Run linter if available:
+   ```bash
+   # Auto-detect linter
+   if [ -f "package.json" ]; then
+       if grep -q '"lint"' package.json; then
+           npm run lint
+       fi
+   elif [ -f "pyproject.toml" ]; then
+       if command -v ruff &> /dev/null; then
+           ruff check .
+       elif command -v flake8 &> /dev/null; then
+           flake8
+       fi
+   fi
+   ```
 
 ## Commit
 

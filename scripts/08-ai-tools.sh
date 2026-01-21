@@ -20,6 +20,13 @@ setup_claude() {
     CLAUDE_DIR="$HOME/.claude"
     CLAUDE_DOTFILES="$DOTFILES_DIR/claude/.claude"
 
+    # Check for existing backups and warn
+    existing_backups=$(ls -d "$HOME/.claude.backup."* 2>/dev/null | wc -l)
+    if [ "$existing_backups" -gt 0 ]; then
+        echo "    ⚠️  Found $existing_backups existing backup(s) at ~/.claude.backup.*"
+        echo "    Consider cleaning up old backups: rm -rf ~/.claude.backup.*"
+    fi
+
     # Backup existing if not stow-managed
     if [ -d "$CLAUDE_DIR" ] && [ ! -L "$CLAUDE_DIR" ]; then
         backup_dir="$CLAUDE_DIR.backup.$(date +%Y%m%d-%H%M%S)"

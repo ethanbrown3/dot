@@ -108,9 +108,16 @@ git add -A
 git commit -m "your commit message"
 ```
 
-## 6. Push and Create Draft PR
+## 6. Verify and Push
 
 ```bash
+# Verify working directory is clean before pushing
+if [ -n "$(git status --porcelain)" ]; then
+    echo "⚠️  Uncommitted changes detected. Commit or stash before pushing."
+    git status --short
+    exit 1
+fi
+
 # Push branch (set upstream if needed)
 git push -u origin "$(git branch --show-current)"
 
