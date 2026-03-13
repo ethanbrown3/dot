@@ -34,19 +34,11 @@ setup_claude() {
         mv "$CLAUDE_DIR" "$backup_dir"
     fi
 
-    # Ensure claude dotfiles directory exists
-    mkdir -p "$CLAUDE_DOTFILES"
-
-    # Create symlinks from claude/.claude to shared ai-config
-    # Remove existing if they exist
-    rm -f "$CLAUDE_DOTFILES/commands" 2>/dev/null || true
-    rm -f "$CLAUDE_DOTFILES/agents" 2>/dev/null || true
-
-    # Create relative symlinks to shared content
-    ln -s "../../ai-config/commands" "$CLAUDE_DOTFILES/commands"
-    ln -s "../../ai-config/agents" "$CLAUDE_DOTFILES/agents"
+    # Ensure claude dotfiles directory exists with all subdirs
+    mkdir -p "$CLAUDE_DOTFILES"/{agents,commands,skills}
 
     # Stow claude config to home directory
+    # This creates ~/.claude -> dotfiles/claude/.claude
     cd "$DOTFILES_DIR"
     stow -v --target="$HOME" claude
 
@@ -56,7 +48,6 @@ setup_claude() {
         cat > "$CLAUDE_DIR/settings.local.json" << 'EOF'
 {
   "_comment": "Machine-specific Claude Code settings. This file is gitignored.",
-  "_example_work_context": "Set CLAUDE_WORK_CONTEXT to 'linear' or 'openspec' to override auto-detection",
   "env": {},
   "mcpServers": {}
 }
@@ -96,7 +87,7 @@ EOF
 
     # Append agent definitions as additional context
     echo "# === Agent Guidelines ===" >> "$CURSORRULES"
-    for agentfile in "$AI_CONFIG_DIR/agents/"*.md; do
+    for agentfile in "$DOTFILES_DIR/claude/.claude/agents/"*.md; do
         if [ -f "$agentfile" ]; then
             cat "$agentfile" >> "$CURSORRULES"
             echo "" >> "$CURSORRULES"
@@ -130,7 +121,7 @@ setup_codex() {
 EOF
 
     # Append shared agent definitions
-    for agentfile in "$AI_CONFIG_DIR/agents/"*.md; do
+    for agentfile in "$DOTFILES_DIR/claude/.claude/agents/"*.md; do
         if [ -f "$agentfile" ]; then
             echo "## $(basename "$agentfile" .md)" >> "$AGENTS_MD"
             echo "" >> "$AGENTS_MD"
@@ -165,19 +156,20 @@ setup_codex
 echo ""
 echo "✅ AI tool configurations complete!"
 echo ""
-echo "📁 Shared config location: ~/dotfiles/ai-config/"
-echo "   - commands/  → Slash commands (edit here, used by Claude)"
-echo "   - agents/    → Agent definitions (used by all tools)"
-echo "   - rules/     → Coding standards (used by Cursor, Codex)"
+echo "📁 Claude config: ~/dotfiles/claude/.claude/"
+echo "   - agents/    → Agent definitions"
+echo "   - commands/  → Slash commands"
+echo "   - skills/    → Multi-step skill workflows"
+echo "   - CLAUDE.md  → Global rules"
+echo "   - settings.json → Permissions and env"
 echo ""
-echo "🔧 Tool-specific locations:"
+echo "📁 Shared config: ~/dotfiles/ai-config/"
+echo "   - rules/     → Coding standards (used by Cursor, Codex)"
+echo "   - prompts/   → Shared prompts"
+echo ""
+echo "🔧 Installed to:"
 echo "   - Claude: ~/.claude/ (symlinked via stow)"
 echo "   - Cursor: ~/.cursorrules (generated)"
 echo "   - Codex:  ~/dotfiles/codex/AGENTS.md (generated)"
 echo ""
-echo "📝 Next steps:"
-echo "   1. Add machine-specific config to ~/.claude/settings.local.json"
-echo "   2. Restart Claude Code to pick up new commands"
-echo "   3. Try: /impl-summary, /review-pr 123, /address-feedback 123"
-echo ""
-echo "🔄 After editing ai-config/, run: ~/dotfiles/scripts/sync-ai-config.sh"
+echo "🔄 After editing config, run: ~/dotfiles/scripts/sync-ai-config.sh"

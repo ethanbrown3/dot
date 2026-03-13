@@ -9,7 +9,26 @@ claude/.claude/*.local.*
 *.local.json
 *.local.md
 
-# Claude Code session data (if any gets created)
+# Claude Code runtime/session data
 claude/.claude/statsig/
 claude/.claude/projects/
 claude/.claude/todos/
+claude/.claude/backups/
+claude/.claude/cache/
+claude/.claude/debug/
+claude/.claude/file-history/
+claude/.claude/ide/
+claude/.claude/paste-cache/
+claude/.claude/plans/
+claude/.claude/plugins/
+claude/.claude/readout-chats/
+claude/.claude/session-env/
+claude/.claude/shell-snapshots/
+claude/.claude/tasks/
+claude/.claude/teams/
+claude/.claude/telemetry/
+claude/.claude/history.jsonl
+claude/.claude/stats-cache.json
+claude/.claude/readout-cost-cache.json
+claude/.claude/readout-pricing.json
+claude/.claude/mcp-needs-auth-cache.json
