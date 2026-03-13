@@ -38,21 +38,27 @@ OpenSpec is a framework for spec-driven development where changes follow a struc
 ### When writing artifacts
 
 1. Read CLAUDE.md and any existing specs (`openspec show <name>`) to understand the current system
-2. Read the codebase to ground proposals in reality — don't propose abstractions that don't fit
-3. Use `openspec status --change <name>` to understand which artifacts exist and what's needed
-4. Use `openspec instructions <artifact> --change <name>` to get schema-specific guidance
-5. Write for agent consumption: be concrete, reference specific files and functions, include acceptance criteria
-6. For specs: every requirement gets at least one scenario, every scenario has a WHEN and a THEN
-7. For tasks: include a self-validation section (build, test, format, integration smoke test with assertions)
+2. Read the codebase to ground proposals in reality — verify files, functions, and signatures you reference actually exist. Don't propose abstractions that don't fit the current code.
+3. Read the ROADMAP (`openspec/ROADMAP.md`) and other active changes (`openspec list --json`) to understand ordering and avoid conflicts
+4. Use `openspec status --change <name>` to understand which artifacts exist and what's needed
+5. Use `openspec instructions <artifact> --change <name>` to get schema-specific guidance
+6. Write for agent consumption: be concrete, reference specific files and functions, include acceptance criteria
+7. For specs: every requirement gets at least one scenario, every scenario has a WHEN and a THEN
+8. For tasks: include a self-validation section (build, test, format, integration smoke test with assertions)
+9. For tasks: reference specific files, function names, and parameter types. Verify these against the actual codebase — an agent following the task should not encounter a function that doesn't exist or a signature that's wrong.
 
 ### When reviewing artifacts
 
-1. Read the proposal first for context
-2. Check specs against the proposal's capability list — is everything covered?
-3. Check design decisions against specs — does the design satisfy the requirements?
-4. Check tasks against design — do the tasks implement the design decisions?
-5. Check self-validation against tasks — will it catch regressions in everything that was implemented?
-6. Think about what an agent would struggle with — ambiguity, missing context, implicit assumptions
+1. **Read CLAUDE.md** for project rules and conventions that artifacts must follow
+2. **Read the actual codebase** — verify that proposals reference real files, functions, and signatures. Check that tasks reference code that exists and describe changes that make sense against the current implementation.
+3. **Read the ROADMAP** (`openspec/ROADMAP.md`) — check that the change fits the declared sequence. Flag ordering conflicts or missing entries.
+4. **Read other active changes** (`openspec list --json`) — check for cross-change conflicts (signature changes, shared files, dependency ordering). Flag when two changes modify the same module without acknowledging each other.
+5. Read the proposal first for context
+6. Check specs against the proposal's capability list — is everything covered?
+7. Check design decisions against specs — does the design satisfy the requirements?
+8. Check tasks against design — do the tasks implement the design decisions?
+9. Check self-validation against tasks — will it catch regressions in everything that was implemented?
+10. Think about what an agent would struggle with — ambiguity, missing context, implicit assumptions
 
 ## Output format
 
