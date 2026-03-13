@@ -22,6 +22,14 @@ if command -v stow >/dev/null 2>&1; then
     stow -v --target="$HOME" zsh git configs || true
     popd >/dev/null
     log "Dotfiles linked via stow"
+
+    # Claude — link config files into existing ~/.claude/ (can't stow because
+    # Claude Code owns that directory and fills it with runtime data)
+    mkdir -p "$HOME/.claude"
+    for item in "$DOTFILES_DIR"/claude/.claude/*; do
+        ln -sfn "$item" "$HOME/.claude/$(basename "$item")"
+    done
+    log "Claude config linked"
 else
     warn "stow not found, creating symlinks manually..."
 
@@ -36,6 +44,12 @@ else
     # configs (aliases and exports live at ~/aliases, ~/exports)
     ln -sf "$DOTFILES_DIR/configs/aliases" "$HOME/aliases"
     ln -sf "$DOTFILES_DIR/configs/exports" "$HOME/exports"
+
+    # claude
+    mkdir -p "$HOME/.claude"
+    for item in "$DOTFILES_DIR"/claude/.claude/*; do
+        ln -sfn "$item" "$HOME/.claude/$(basename "$item")"
+    done
 
     log "Dotfiles linked manually"
 fi
