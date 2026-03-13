@@ -42,7 +42,6 @@ alias rm='rm -iv'                           # Preferred safe 'rm' implementation
 alias cp='cp -iv'                           # Preferred 'cp' implementation
 alias mv='mv -iv'                           # Preferred 'mv' implementation
 alias mkdir='mkdir -pv'                     # Preferred 'mkdir' implementation
-# Note: ll, la, l aliases are set in ~/.zshrc with modern tools (eza)
 alias cd..='cd ../'                         # Go back 1 directory level (for fast typers)
 alias ..='cd ../'                           # Go back 1 directory level
 alias ...='cd ../../'                       # Go back 2 directory levels
@@ -73,9 +72,24 @@ alias pyglatest='mise use python@latest'    # latest python version
 # home
 alias homepi='ssh pi@192.168.1.31' # ssh into home raspberry pi locally
 
+# Modern tool aliases (conditional — fall back to defaults if not installed)
+if command -v eza >/dev/null 2>&1; then
+  alias ll='eza -la'
+  alias la='eza -a'
+  alias l='eza -l'
+else
+  alias ll='ls -la'
+  alias la='ls -a'
+  alias l='ls -l'
+fi
+command -v bat >/dev/null 2>&1 && alias cat='bat'
+command -v rg >/dev/null 2>&1 && alias grep='rg'
+command -v fd >/dev/null 2>&1 && alias find='fd'
+
 # AI coding tools
 alias cc='claude'
 alias ccr='claude --resume'
+alias ccd='claude --dangerously-skip-permissions'
 
 # AI config management
 alias ai-diff='cd ~/dotfiles && git diff ai-config/ claude/ cursor/ codex/ && cd - > /dev/null'

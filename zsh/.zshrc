@@ -43,19 +43,6 @@ if [[ -f "$HOME/aliases" ]]; then
   source "$HOME/aliases"
 fi
 
-# Modern tool aliases (conditional — fall back to defaults if not installed)
-if command -v eza >/dev/null 2>&1; then
-  alias ll='eza -la'
-  alias la='eza -a'
-  alias l='eza -l'
-else
-  alias ll='ls -la'
-  alias la='ls -a'
-  alias l='ls -l'
-fi
-command -v bat >/dev/null 2>&1 && alias cat='bat'
-command -v rg >/dev/null 2>&1 && alias grep='rg'
-command -v fd >/dev/null 2>&1 && alias find='fd'
 
 # Better history
 HISTSIZE=10000
