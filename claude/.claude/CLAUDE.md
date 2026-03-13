@@ -1,5 +1,9 @@
 Never add Co-authored-by trailers to git commits.
 
+## Shell Commands
+
+This system aliases `rm`, `cp`, and `mv` to require interactive confirmation (`-i` flag). When running these commands — especially in subagents — pass the `-f` flag to override the confirmation prompt, otherwise the command will hang waiting for input. For example: `rm -rf`, `cp -f`, `mv -f`. Only use `-f` when the action is necessary for the current task, the files are within a git repo, and they are tracked (i.e., recoverable via git).
+
 ## Code Quality
 
 Never justify a bad pattern by pointing to existing bad code. If you encounter a broken window, fix it or propose it as tech debt — don't propagate it.
