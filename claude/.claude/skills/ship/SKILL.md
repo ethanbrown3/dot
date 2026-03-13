@@ -35,23 +35,38 @@ Capture the PR number for the next phase.
 
 ### Determine which agents to launch
 
-Before launching agents, check if the PR touches OpenSpec artifacts:
+First, classify the PR by checking what types of files changed:
 
 ```bash
-gh pr diff {number} --name-only | grep -E '(openspec/|\.openspec)'
+gh pr diff {number} --name-only
 ```
 
-**Always launch these 3 core agents:**
+Classify each file:
+- **Code files**: `*.py`, `*.js`, `*.ts`, `*.rs`, `*.go`, `*.java`, etc. Also test files.
+- **Spec files**: anything under `openspec/` or `.openspec` files
+- **Config/docs**: `*.md` (outside openspec/), `*.yaml`, `*.toml`, `.gitignore`, etc.
+
+**If the PR contains ANY code files**, launch the 3 core agents:
 - Bug Hunter
 - Test Reviewer
 - Quality Reviewer
 
-**Conditionally launch Spec Writer** if ANY of the following are true:
+**If the PR is spec-only** (all changed files are under `openspec/`, or are `.openspec.yaml` files, with no code files), launch ONLY the Spec Writer agent. The code review agents have nothing useful to review on prose-only PRs.
+
+**Conditionally launch Spec Writer** (in addition to core agents) if ANY of the following are true:
 - The diff includes files under `openspec/` (proposals, specs, designs, tasks)
 - The diff includes new modules or significant architectural changes (new files, renamed files, major refactors)
 - The PR branch name contains "spec", "proposal", "openspec", or "pipeline" (heuristic for spec-related work)
 
 If none of these conditions are met, skip the spec-writer agent.
+
+**Summary of agent selection:**
+
+| PR type | Bug Hunter | Test Reviewer | Quality Reviewer | Spec Writer |
+|---------|-----------|--------------|-----------------|-------------|
+| Code only | yes | yes | yes | no |
+| Code + specs | yes | yes | yes | yes |
+| Spec only | no | no | no | yes |
 
 ### Agent prompts
 
@@ -73,7 +88,7 @@ Prompt: "Review PR #{number} in this repository. Read CLAUDE.md first, then get 
 
 ## Phase 3: Triage and Fix
 
-When all three agents complete, consolidate their findings into a single prioritized list:
+When all launched agents complete, consolidate their findings into a single prioritized list:
 
 ### Triage rules
 - **Fix now**: any finding rated high/critical by ANY reviewer, or flagged by multiple reviewers
@@ -85,7 +100,7 @@ For each "fix now" item:
 2. Make the fix
 3. Move to the next item
 
-After all fixes are applied:
+After all fixes are applied (skip this block for spec-only PRs with no code changes):
 - Run the project's build command (check CLAUDE.md for specifics)
 - Run the project's test command
 - Run any format/lint checks
