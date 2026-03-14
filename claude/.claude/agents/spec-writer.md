@@ -25,11 +25,16 @@ OpenSpec is a framework for spec-driven development where changes follow a struc
 ## What to evaluate when reviewing
 
 - **Proposal quality**: Is the "why" compelling? Are capabilities correctly identified? Would an agent understand what to build?
-- **Spec precision**: Do requirements use SHALL/MUST (not should/may)? Does every requirement have at least one scenario? Are scenarios testable — could you write an assertion for the THEN clause?
+- **Spec precision**: Do requirements use SHALL/MUST (not should/may)? Does every requirement have at least one scenario? Are scenarios testable — could you write an assertion for the THEN clause? Are THEN clauses specific enough that a shallow assertion (e.g., `len(x) > 0`) would NOT satisfy them?
 - **Design decisions**: Is there rationale for each decision? Were alternatives considered? Are risks identified with mitigations?
 - **Task decomposition**: Are tasks small enough for one session? Ordered by dependency? Does each task have clear completion criteria? Could an agent pick up task 3.2 without reading the full conversation history?
 - **Self-validation**: Does tasks.md include a validation section? Can the implementing agent run it end-to-end without human involvement? Are human prerequisites identified upfront?
 - **Agent-implementability**: The audience for these artifacts is AI coding agents, not humans reading a wiki. Vague tasks like "improve error handling" will fail. Specific tasks like "in supervisor.zig:handleCoderCompletion, add a check for v.kind == .fail that routes to retryOrFail" will succeed.
+- **Assertion depth in test tasks**: When a task says "test" or "verify", does it specify the *exact assertion*? "Verify it works" is not a test task. "Verify that `result.cost_usd == 0.15` after JSON roundtrip" is. Watch especially for:
+  - **Serialization/persistence**: Does the test verify all fields survive a roundtrip (write → read → compare)? Shallow checks like `len(items) == 3` pass while data is silently lost.
+  - **Data transfer**: When data passes between components, does the test verify subtype-specific fields arrive, not just the base type?
+  - **Negative assertions**: Does the test verify things that *shouldn't* happen don't? (`assert "None" not in output`)
+- **Test-spec traceability**: Can every spec scenario be mapped to a specific test task? If a scenario has no corresponding test, flag it.
 - **Capability coverage**: Do the specs cover the full surface area of the change? Are there scenarios missing for edge cases, error paths, and boundary conditions?
 - **Spec-implementation alignment**: Do delta specs in the change correctly reference existing main specs? Will archiving produce coherent main specs?
 
@@ -89,3 +94,5 @@ Severity levels:
 - Do NOT write vague tasks. "Implement the feature" is not a task. "In src/pipeline.zig, implement advanceCoder that takes (allocator, task, verdict, has_code_changes, has_tests) and returns CoderResult" is a task.
 - Do NOT confuse specs (WHAT the system does) with design (HOW it's built). Specs define external behavior and contracts. Design defines internal architecture.
 - MODIFIED specs MUST include the full updated requirement text, not just the diff — OpenSpec replaces the entire requirement block at archive time
+- When a change involves data models that are serialized (JSON, disk, network), the spec MUST include a roundtrip scenario that verifies subtype-specific fields survive serialization and deserialization. Tests that only check base-type fields (e.g., `success`, `stage`) will miss silent data loss in subtypes.
+- Test tasks MUST include the specific assertion, not just the behavior. BAD: "Verify the manifest serializes correctly." GOOD: "Verify that after `model_dump_json()` → `model_validate_json()`, `stages[1].cost_usd == 0.15` for a WorkerResult stage."
